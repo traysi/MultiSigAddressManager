@@ -36,17 +36,11 @@ This utility requires that you have the coin daemon running for this coin, accep
 
     $ coin-cli importaddress MULTISIG_RCV_ADDR "" true
 
-Once the watchonly address is added, your daemon will be able to see all transactions involving this address. You can confirm that with:
-
-    $ coin-cli MULTISIG_RCV_ADDR "" true
-
-Edit the config file and set the important variables. You need to have the multisig public address, redeemScript, scriptPubKey, as well as your own private key for your signing.
+That step may take a little while to complete. Once the watchonly address is added, your daemon will be able to see all transactions involving this address. You can confirm that with:
 
     $ coin-cli listunspent 0 99999999 "[\"MULTISIG_RCV_ADDR\"]"
 
-That should print a pile of UTXOs. If you see a bunch of stuff, you're ready to configure the utility.
-
-Edit the config.php file to set the variables. The configuration options should be self-explanatory.
+That should print a pile of UTXOs. If you see a bunch of stuff, you're ready to proceed with configuring the utility. In the MultiSigAddressManager directory, edit the config.php file and set the important variables. You need to have the multisig public address, redeemScript, scriptPubKey, as well as your own private key for your signing. The other configuration options should all be self-explanatory.
 
 Usage
 -----
