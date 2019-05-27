@@ -23,9 +23,15 @@ Requirements and Installation
 
 This utility was intended to be used on Linux. The author uses Ubuntu 16.04 but any Linux or Unix variant should work fine. It requires PHP. It probably works fine on Windows but this has not been tested. Each signer of your multisig wallet should install this utility and customize it for their own signing situation.
 
-[PHP](http://php.net):
+[PHP](http://php.net) (Ubuntu 16):
 
     $ sudo apt-get -y install php7.0-cli php-curl
+
+Or if you're on Ubuntu 18:
+
+[PHP](http://php.net) (Ubuntu 18):
+
+    $ sudo apt-get -y install php7.2-cli php-curl
 
 Clone the MultiSigAddressManager repository:
 
