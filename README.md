@@ -75,7 +75,7 @@ Once everyone has signed, you will have a final file of transactions that you ca
 
 If successful, that will print out a series of transaction IDs for each transaction that has been broadcast to the network. Your wallet is now consolidated and you can later spend large funds from it.
 
-No that it's consolidated, to spend large amounts of funds from the wallet, first let your consolidated funds confirm on the network. 100 confirmations is reasonable for most fast blockchains. Then generate the spending transaction like so:
+Now that it's consolidated, to spend large amounts of funds from the wallet, first let your consolidated funds confirm on the network. 100 confirmations is reasonable for most fast blockchains. Then generate the spending transaction like so:
 
     $ ./spend_funds.php RECIPIENT_ADDRESS AMOUNT > tx
 
