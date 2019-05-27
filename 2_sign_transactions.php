@@ -7,6 +7,8 @@
 include("rpc.php");
 include("config.php");
 
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
+
 if (! $config['multisig']) { die("You must edit the config.php file first.\n"); }
 
 $rpc = new Bitcoin($config['rpcuser'],$config['rpcpassword'],$config['rpcbind'],$config['rpcport']);
