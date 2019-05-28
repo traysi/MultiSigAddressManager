@@ -28,6 +28,9 @@ if(is_array($transactions)) {
     $info = $rpc->sendrawtransaction($tx_hex);
     print "TX ID: $info\n";
 
+    // Here we will wait 1 second before proceeding. We do this to protect the chain from being flooded
+    // with transactions. If you want to do the flood, just comment out the line below.
+    sleep(1);
   }
 }
 
