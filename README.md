@@ -12,7 +12,7 @@ Documentation
 Overview
 --------
 
-In blockchain-based cryptocurrencies, UTXOs can pile up and make it different to spend funds in a single transaction. When this happens, UTXOs need to be consolidated into higher value UTXOs so they can be spent. It is not possible to send a transaction with thousands of unspents. The problem is exacerbated with multisig wallets because each signing party must sign each and every transaction in the consolidation process.
+In blockchain-based cryptocurrencies, UTXOs can pile up and make it difficult to spend funds in a single transaction. When this happens, UTXOs need to be consolidated into higher value UTXOs so they can be spent. It is not possible to send a transaction with thousands of unspents. The problem is exacerbated with multisig wallets because each signing party must sign each and every transaction in the consolidation process.
 
 The MultiSigAddressManager was written by Traysi to provide a tool for multisig wallet signers to more conveniently consolidate their funds and to spend those funds.
 
