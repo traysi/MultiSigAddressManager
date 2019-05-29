@@ -36,8 +36,8 @@ $sum = 0;
 $x = 0;
 if(is_array($coins)) {
   while (list($k,$v)=each($coins)) {
+    if ($v['amount'] <= $config['consolidate_amount']) continue;
     if ($v['confirmations'] < $config['confirmations']) continue;
-    if ($v['amount'] < $config['consolidate_amount']) continue;
 
     if ($sum < $amount) {
       $sum = $sum + $v['amount'];
@@ -54,23 +54,25 @@ if(is_array($coins)) {
 }
 
 $change = $sum - $amount - $config['tx_fee'];
-
-
-if(is_array($vins)) {
-  $recipient[$sendto] = $amount;
-  $recipient[$multisig] = $change;
-  $tx = $rpc->createrawtransaction($vins,$recipient);
-
-  if ($dry_run) {
-    $decode = $rpc->decoderawtransaction($tx);
-    print_r($decode);
-  } else {
-    print "$tx\n";
+if ($change > 0) {
+  if(is_array($vins)) {
+    $recipient[$sendto] = $amount;
+    $recipient[$multisig] = $change;
+    $tx = $rpc->createrawtransaction($vins,$recipient);
+  
+    if ($dry_run) {
+      $decode = $rpc->decoderawtransaction($tx);
+      print_r($decode);
+    } else {
+      print "$tx\n";
+    }
   }
-}
-
-if ($dry_run) {
-  print "Total being spent: $sum\n";
-  print "Amount for $sendto: $amount\n";
-  print "Change left: $change\n";
+  
+  if ($dry_run) {
+    print "Total being spent: $sum\n";
+    print "Amount for $sendto: $amount\n";
+    print "Change left: $change\n";
+  }
+} else {
+  print "Fatal error: There aren't enough confirmed coins in this wallet to send $amount to $sendto.\n";
 }
