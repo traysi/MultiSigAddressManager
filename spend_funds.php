@@ -37,7 +37,7 @@ $x = 0;
 if(is_array($coins)) {
   while (list($k,$v)=each($coins)) {
     if ($v['confirmations'] < $config['confirmations']) continue;
-    if ($v['amount'] > $config['consolidate_amount']) continue;
+    if ($v['amount'] < $config['consolidate_amount']) continue;
 
     if ($sum < $amount) {
       $sum = $sum + $v['amount'];
