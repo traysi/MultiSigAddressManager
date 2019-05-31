@@ -37,13 +37,13 @@ if(is_array($transactions)) {
     if(is_array($info[vin])) {
       while (list($a,$b)=each($info[vin])) {
         $vin_count++;
-        $info[vin][$a]['scriptPubKey'] = $config['scriptPubKey'];
-        $info[vin][$a]['redeemScript'] = $config['redeemScript'];
+        $info['vin'][$a]['scriptPubKey'] = $config['scriptPubKey'];
+        $info['vin'][$a]['redeemScript'] = $config['redeemScript'];
       }
     }
 
     $signed = $rpc->signrawtransaction($tx_hex,$info[vin],$priv_key);
-    if ($signed[hex] != $tx_hex) {
+    if ($signed['hex'] != $tx_hex) {
       print "$signed[hex]\n"; 
     } else {
       fwrite(STDERR, "FATAL: There was an error signing." . PHP_EOL);
