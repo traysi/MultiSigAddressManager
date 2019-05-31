@@ -46,6 +46,7 @@ if(is_array($transactions)) {
     if (! $signed) {
       $error = $rpc->response['error']['message'];
       fwrite(STDERR, "FATAL: Cannot sign. Error message: $error" . PHP_EOL);
+      print_r($rpc);
     } else {
       if ($signed['hex'] != $tx_hex) {
         print "$signed[hex]\n"; 
