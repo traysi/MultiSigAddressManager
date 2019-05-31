@@ -43,10 +43,15 @@ if(is_array($transactions)) {
     }
 
     $signed = $rpc->signrawtransaction($tx_hex,$info['vin'],$priv_key);
-    if ($signed['hex'] != $tx_hex) {
-      print "$signed[hex]\n"; 
+    if (! $signed) {
+      $error = $rpc->response['error']['message'];
+      fwrite(STDERR, "FATAL: Cannot sign. Error message: $error" . PHP_EOL);
     } else {
-      fwrite(STDERR, "FATAL: There was an error signing." . PHP_EOL);
+      if ($signed['hex'] != $tx_hex) {
+        print "$signed[hex]\n"; 
+      } else {
+        fwrite(STDERR, "FATAL: There was an error signing." . PHP_EOL);
+      }
     }
   }
 } else {
