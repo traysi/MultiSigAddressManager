@@ -34,8 +34,8 @@ if(is_array($transactions)) {
 
     $info = $rpc->decoderawtransaction($tx_hex);
     
-    if(is_array($info[vin])) {
-      while (list($a,$b)=each($info[vin])) {
+    if(is_array($info['vin'])) {
+      while (list($a,$b)=each($info['vin'])) {
         $vin_count++;
         $info['vin'][$a]['scriptPubKey'] = $config['scriptPubKey'];
         $info['vin'][$a]['redeemScript'] = $config['redeemScript'];
@@ -55,5 +55,8 @@ if(is_array($transactions)) {
   
 
 if (! $vin_count) {
+  
   fwrite(STDERR, "FATAL: Unable to find transactions to sign in $argv[1]." . PHP_EOL);
+  fwrite(STDERR, "File size of $argv[1] is ".filesize($argv[1]) . PHP_EOL);
+  
 }
