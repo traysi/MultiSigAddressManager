@@ -42,7 +42,7 @@ if(is_array($transactions)) {
       }
     }
 
-    $signed = $rpc->signrawtransaction($tx_hex,$info[vin],$priv_key);
+    $signed = $rpc->signrawtransaction($tx_hex,$info['vin'],$priv_key);
     if ($signed['hex'] != $tx_hex) {
       print "$signed[hex]\n"; 
     } else {
