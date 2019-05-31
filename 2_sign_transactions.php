@@ -16,15 +16,18 @@ $rpc = new Bitcoin($config['rpcuser'],$config['rpcpassword'],$config['rpcbind'],
 if ($argv[2]) {
   $priv_key[] = $argv[2];
 } else {
-  die("Usage: $argv[0] <transaction_file> <private key>\n");
+  fwrite(STDERR, "Usage: $argv[0] <transaction_file> <private key>" . PHP_EOL);
+  die();
 }
 
 if (file_exists($argv[1])) {
   $transactions = explode("\n", file_get_contents($argv[1]));
 } else {
-  die("Error: file not found $argv[1]\n");
+  fwrite(STDERR, "Error: File not found $argv[1]" . PHP_EOL);
+  die();
 }
 
+$vin_count = 0;
 if(is_array($transactions)) {
   while (list($k,$tx_hex)=each($transactions)) {
     if (! $tx_hex) continue;
@@ -33,15 +36,24 @@ if(is_array($transactions)) {
     
     if(is_array($info[vin])) {
       while (list($a,$b)=each($info[vin])) {
+        $vin_count++;
         $info[vin][$a]['scriptPubKey'] = $config['scriptPubKey'];
         $info[vin][$a]['redeemScript'] = $config['redeemScript'];
       }
     }
 
     $signed = $rpc->signrawtransaction($tx_hex,$info[vin],$priv_key);
-    if (($signed[hex] != $tx_hex) || ($signed[complete])) {
+    if ($signed[hex] != $tx_hex) {
       print "$signed[hex]\n"; 
+    } else {
+      fwrite(STDERR, "FATAL: There was an error signing." . PHP_EOL);
     }
   }
+} else {
+  fwrite(STDERR, "FATAL: The input file $argv[1] contains no valid transactions." . PHP_EOL);
 }
+  
 
+if (! $vin_count) {
+  fwrite(STDERR, "FATAL: Unable to find transactions to sign." . PHP_EOL);
+}
