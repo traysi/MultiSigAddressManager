@@ -55,5 +55,5 @@ if(is_array($transactions)) {
   
 
 if (! $vin_count) {
-  fwrite(STDERR, "FATAL: Unable to find transactions to sign." . PHP_EOL);
+  fwrite(STDERR, "FATAL: Unable to find transactions to sign in $argv[1]." . PHP_EOL);
 }
