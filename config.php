@@ -16,7 +16,7 @@ $config['tx_fee'] = '0.01';
 $config['consolidate_amount'] = 12500;
 
 // Confirmations for maturity
-$config['confirmations'] = 10;
+$config['confirmations'] = 100;
 
 // **********************************************************
 // Default config below is for the Pigeoncoin multisig wallet. 
