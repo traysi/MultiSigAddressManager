@@ -49,6 +49,9 @@ if(is_array($txouts)) {
     $recipient[$multisig] = $sum[$y] - $config['tx_fee'];
     if (count($v) == $config['utxo_limit']) {
       $tx = $rpc->createrawtransaction($v,$recipient);
+      if (! $tx) {
+        print_r($rpc);
+      }
       print "$tx\n";
     }
   }
