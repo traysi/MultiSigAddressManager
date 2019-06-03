@@ -50,6 +50,8 @@ if(is_array($txouts)) {
     if (count($v) == $config['utxo_limit']) {
       $tx = $rpc->createrawtransaction($v,$recipient);
       if (! $tx) {
+        print "Missed tx: amount: $sum[$y] ($recipient[$multisig]\n";
+        print_r($v);
         print_r($rpc);
       }
       print "$tx\n";
