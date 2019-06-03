@@ -58,8 +58,8 @@ if(is_array($coins)) {
 $change = $sum - $amount - $config['tx_fee'];
 if ($change > 0) {
   if(is_array($vins)) {
-    $recipient[$sendto] = $amount;
-    $recipient[$multisig] = $change;
+    $recipient[$sendto] = sprintf('%.8f', round($amount, 8, PHP_ROUND_HALF_DOWN));
+    $recipient[$multisig] = sprintf('%.8f', round($change, 8, PHP_ROUND_HALF_DOWN));
 
     $tx = $rpc->createrawtransaction($vins,$recipient);
   
