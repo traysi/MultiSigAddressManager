@@ -41,12 +41,18 @@ if(is_array($coins)) {
 
     $txouts[$y][] = $o;
     $sum[$y] = $sum[$y] + $v['amount'];
+    $sum[$y] = sprintf('%.8f', round($sum[$y], 8, PHP_ROUND_HALF_DOWN));
+
   }
 }
 
 if(is_array($txouts)) {
   while (list($y,$v)=each($txouts)) {
     $recipient[$multisig] = $sum[$y] - $config['tx_fee'];
+
+    // In case we ended up with more than 8 decimal places:
+    $recipient[$multisig] = sprintf('%.8f', round($recipient[$multisig], 8, PHP_ROUND_HALF_DOWN));
+
     if (count($v) == $config['utxo_limit']) {
       $tx = $rpc->createrawtransaction($v,$recipient);
       // if (! $tx) { print "Missed tx: amount: $sum[$y] ($recipient[$multisig]\n"; print_r($v); print_r($rpc); }

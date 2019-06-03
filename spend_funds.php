@@ -41,6 +41,8 @@ if(is_array($coins)) {
 
     if ($sum < $amount) {
       $sum = $sum + $v['amount'];
+      $sum = sprintf('%.8f', round($sum, 8, PHP_ROUND_HALF_DOWN));
+
 
       $o['txid'] = $v['txid'];
       $o['vout'] = $v['vout'];
@@ -58,6 +60,7 @@ if ($change > 0) {
   if(is_array($vins)) {
     $recipient[$sendto] = $amount;
     $recipient[$multisig] = $change;
+
     $tx = $rpc->createrawtransaction($vins,$recipient);
   
     if ($dry_run) {
