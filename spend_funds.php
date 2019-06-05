@@ -19,10 +19,10 @@ $coins = $rpc->listunspent(1,99999999,$address);
 if(! is_array($coins)) die("Error: unable to connect to the coin daemon.");
 
 $sendto = $argv[1];
-$amount = $argv[2];
+$spend_amount = $argv[2];
 $dry_run = $argv[3];
 
-if (! $amount) {
+if (! $spend_amount) {
   die("Usage: $argv[0] <recipient> <amount> <dry-run>\n");
 }
 
@@ -32,33 +32,46 @@ if (! $rpc->validateaddress($sendto)) {
 
 $vins = array();
 
-$sum = 0;
-$x = 0;
 if(is_array($coins)) {
   while (list($k,$v)=each($coins)) {
     if ($v['amount'] <= $config['consolidate_amount']) continue;
     if ($v['confirmations'] < $config['confirmations']) continue;
 
-    if ($sum < $amount) {
-      $sum = $sum + $v['amount'];
-      $sum = sprintf('%.8f', round($sum, 8, PHP_ROUND_HALF_DOWN));
+    $txid = $v['txid'];
+    $vout = $v['vout'];
+    $newcoins[$txid][$vout] = $v['amount'];
+  }
+}
 
+$sum = 0;
+$x = 0;
 
-      $o['txid'] = $v['txid'];
-      $o['vout'] = $v['vout'];
-      $o['scriptPubKey'] = $config['scriptPubKey'];
-      $o['redeemScript'] = $config['redeemScript'];
-  
-      $vins[] = $o;
-      $x++;
+if(is_array($newcoins)) {
+  arsort($newcoins); // Sort by value
+  while (list($txid,$v)=each($newcoins)) {
+    if(is_array($v)) {
+      while (list($vout,$amount)=each($v)) {
+        if ($sum < $spend_amount) {
+          $sum = $sum + $amount;
+          $sum = sprintf('%.8f', round($sum, 8, PHP_ROUND_HALF_DOWN));
+    
+          $o['txid'] = $txid;
+          $o['vout'] = $vout;
+          $o['scriptPubKey'] = $config['scriptPubKey'];
+          $o['redeemScript'] = $config['redeemScript'];
+
+          $vins[] = $o;
+          $x++;
+        }
+      }
     }
   }
 }
 
-$change = $sum - $amount - $config['tx_fee'];
+$change = $sum - $spend_amount - $config['tx_fee'];
 if ($change > 0) {
   if(is_array($vins)) {
-    $recipient[$sendto] = sprintf('%.8f', round($amount, 8, PHP_ROUND_HALF_DOWN));
+    $recipient[$sendto] = sprintf('%.8f', round($spend_amount, 8, PHP_ROUND_HALF_DOWN));
     $recipient[$multisig] = sprintf('%.8f', round($change, 8, PHP_ROUND_HALF_DOWN));
 
     $tx = $rpc->createrawtransaction($vins,$recipient);
@@ -73,7 +86,7 @@ if ($change > 0) {
   
   if ($dry_run) {
     print "Total being spent: $sum\n";
-    print "Amount for $sendto: $amount\n";
+    print "Amount to $sendto: $spend_amount\n";
     print "Change left: $change\n";
   }
 } else {
